@@ -1,0 +1,110 @@
+{% extends "screserve/base.html" %}
+
+{% block title %}S.C | Create Client{% endblock %}
+
+{% block content %}
+
+ <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Client
+        <small>Create Client</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="?"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Client</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+     <form class="frm-client-add" enctype="multipart/form-data" method="post" action="{% url 'create_profile' %}">
+       {% csrf_token %}
+      <section class="content">
+        <div class="row">
+            <div class="box no-border">
+              <div class="box-header bg-blue">
+                <h3 class="box-title">Personal Details</h3>
+              </div>
+              <div class="box-body">
+
+                                <div class="row">
+
+                                        <div class="col-md-3">
+                                          <div class="form-group">
+                                            <label>Surname</label> <span style="color:red;">{{form.lname.errors.as_text}}</span>
+                                            <input type="text" class="form-control txtlname" name="lname" required value="{{form.lname.value}}">
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                          <div class="form-group">
+                                            <label>First Name</label> <span style="color:red;">{{form.fname.errors.as_text}}</span>
+                                            <input type="text" class="form-control txtfname" name="fname" required value="{{form.fname.value}}">
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                          <div class="form-group">
+                                            <label>Middle Name</label> <span style="color:red;">{{form.mname.errors.as_text}}</span>
+                                            <input type="text" class="form-control txtmname" name="mname" required value="{{form.mname.value}}">
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                          <div class="form-group">
+                                            <label>Date of Birth</label> <span style="color:red;">{{form.birthday.errors.as_text}}</span>
+                                            <input type="date" class="form-control txtbdate" name="birthday" required value="{{form.birthday.value}}">
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Contact Number</label> <span style="color:red;">{{form.contact.errors.as_text}}</span>
+                                                <input type="text" class="form-control txtcontactno" name="contact" required value="{{form.contact.value}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                          <div class="form-group">
+                                            <label>Gender</label> <span style="color:red;">{{form.sex.errors.as_text}}</span>
+                                            <br>
+                                            <label>
+                                              <input type="radio" name="sex" class="minimal" value="M">
+                                              Male
+                                            </label>
+                                            <label>
+                                              <input type="radio" name="sex" class="minimal" value="F">
+                                              Female
+                                            </label>
+                                          </div>
+                                        </div>
+
+                                </div>
+
+                                <hr>
+
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+                                      <label>Address</label> <span style="color:red;">{{form.address.errors.as_text}}</span>
+                                      <textarea class="form-control txtaddress" name="address" rows="3" required>{{form.address.value}}</textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
+                  </div>
+                </div>
+
+              </div>
+
+        </div>
+      </section>
+      </form>
+    </section>
+    <!-- /.content -->
+
+{% endblock %}

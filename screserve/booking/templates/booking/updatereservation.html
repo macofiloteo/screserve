@@ -1,0 +1,207 @@
+{% extends "screserve/base.html" %}
+{% load has_group %}
+{% block title %}S.C | Update Client{% endblock %}
+
+{% block content %}
+ <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Reservation
+        <small>Update Reservation</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="?"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Client</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+     <form class="frm-client-add" enctype="multipart/form-data" action="{% url 'update_booking' booking.pk %}" method="post">
+       {% csrf_token %}
+      <section class="content">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box no-border">
+                  <div class="box-header bg-aqua">
+                    <h3 class="box-title">Customer Details</h3>
+                  </div>
+                  <div class="box-body">
+                    Full Name:
+
+                    <select class="form-control select2" style="width: 100%;" name="{{form.client.name}}">
+                      {% for value,text in form.client.field.choices %}
+                      <option {% if value == booking.client.pk %} selected="selected" {% endif %} value="{{value}}">{{text}}</option>
+                      {% endfor %}
+                    </select>
+
+                  </br>
+                    Birthdate : <label>{{booking.client.birthday}}</label></br>
+                    Sex : <label>{{booking.client.get_sex_display}}</label><br>
+                    Address : <label>{{booking.client.address}}</label><br>
+                    Contact No. : <label>{{booking.client.contact}}</label>
+                  </div>
+                </div>
+
+                <div class="box no-border">
+                  <div class="box-header bg-aqua">
+                    <h3 class="box-title">Reservation Log</h3>
+                  </div>
+                  <div class="box-body">
+                    <ul class="timeline">
+                      {% for date_key, history in group_date.items %}
+
+                      <li class="time-label">
+                        <span class="bg-red">
+                          {{date_key}}
+                        </span>
+                      </li>
+                      <!-- timeline item -->
+                      {% for hist in history %}
+                      <li>
+                        <i class="{% if hist.status == 'A' %}fa fa-check bg-green {% endif %} {% if hist.status == 'D' or hist.status == 'C' %}fa fa-times bg-red{% endif %}"></i>
+
+                        <div class="timeline-item">
+                          <span class="time"><i class="fa fa-clock-o"></i> {{hist.history_date.time}}</span>
+                          
+                          <h3 class="timeline-header bg-success">{% if hist.get_status_display == 'Pending' %}<strong>Pending</strong>. Created by {{hist.history_user}}{% else %}Has been <strong>{{hist.get_status_display}}</strong> by {{hist.history_user}}{% endif %}</h3>
+
+                        </div>
+                      </li>
+                      {% endfor %}
+                      {% endfor %}
+                      <!-- END timeline item -->
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+              <div class="box no-border">
+                <div class="box-header bg-aqua">
+                  <h3 class="box-title">{{booking.typeofreservation}}-{{booking.turn}}</h3>
+                  <span class="pull-right">Date of Transaction: &nbsp; {{booking.dateofreservation}}</span>
+                </div>
+                <div class="box-body">
+
+                                  <div class="row">
+                                      {% if request.user|has_group:"Administrator" %}
+                                          <div class="col-md-4">
+                                            <label>Date of Transaction</label>
+                                            <br>
+                                            <input type="datetime-local" class="form-control txtdateofreservation" name="{{form.dateofreservation.name}}" value="{{booking.dateofreservation |date:'Y-m-d\TH:i'}}">
+                                          </div>
+                                          <div class="col-md-4">
+                                              <div class="form-group">
+                                                <label>Type</label>
+                                                <br>
+                                                {% for value,text in form.typeofreservation.field.choices%}
+                                                <span>
+                                                  <input type="radio" name="{{form.typeofreservation.name}}" value="{{value}}" {% if value == booking.typeofreservation %} checked {% endif %}>
+                                                   {{text}}
+                                                </span> &nbsp;  &nbsp;  &nbsp;
+                                                {% endfor %}
+                                              </div>
+                                          </div>
+
+                                          <div class="col-md-4">
+                                              <div class="form-group">
+                                                <label>Turn</label>
+                                                <br>
+                                                <input type="number" class="form-control txttypeturn" name="{{form.turn.name}}" value="{{booking.turn}}">
+                                              </div>
+                                          </div>
+                                          <br>
+
+                                          <div class="clearfix"></div>
+                                          {% endif %}
+                                          <div class="col-md-8">
+                                            <div class="form-group">
+                                              <label>Mode</label>
+                                              <br>
+                                              {% for value,text in form.modeofbooking.field.choices%}
+                                              <span>
+                                                <input type="radio" name="{{form.modeofbooking.name}}" value="{{value}}" {% if value == booking.modeofbooking %} checked {% endif %}>
+                                                 {{text}}
+                                              </span> &nbsp;  &nbsp;  &nbsp;
+                                              {% endfor %}
+                                            </div>
+                                          </div>
+                                          
+                                         
+                                          <div class="col-md-6">
+                                            <div class="form-group">
+                                              <label>Select Attending Officer</label>
+                                                <select class="form-control select2" style="width: 100%;" name="{{form.officer.name}}">
+                                                  {% if request.user|has_group:"Administrator" %}
+                                                      {% for value,text in form.officer.field.choices %}
+                                                      <option class="{{booking.officer.pk}} {{value}}" {% if value == booking.officer.pk %} selected="selected" {% endif %} value="{{value}}">{{text}}</option>
+                                                      {% endfor %}
+                                                      {% else %}
+                                                      <option class="{{booking.officer.pk}} {{officer.pk}}" selected="selected" value="{{officer.pk}}">{{officer.lname}}, {{officer.fname}}</option>
+                                                  {% endif %}
+                                                </select>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <div class="form-group">
+                                              <label>Cottage</label>
+                                                <input type="number" class="form-control txtcottage" name="{{form.cottagenumber.name}}" value="{{booking.cottagenumber}}">
+                                            </div>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <div class="form-group">
+                                              <label>Number of Guest</label>
+                                                <input type="number" class="form-control txtnoofguest" name="{{form.noofguest.name}}" value="{{booking.noofguest}}" >
+                                            </div>
+                                          </div>
+
+                                          <div class="clearfix"></div>
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Actual Date of Visit</label>
+                                              <input type="date" class="form-control txtdateactual" name="{{form.dateofactualvisit.name}}" value="{{booking.dateofactualvisit|date:'Y-m-d'}}">
+                                            </div>
+                                          </div>
+
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Expected Time of Arrival</label>
+                                              <input type="time" class="form-control txtexpectedtime" name="{{form.timeofarrival.name}}" value="{{booking.timeofarrival|time:'H:i'}}">
+                                            </div>
+                                          </div>
+
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Preferred Time of Departure</label>
+                                              <input type="time" class="form-control txtprefferedtime" name="{{form.timeofdeparture.name}}" value="{{booking.timeofdeparture|time:'H:i'}}" >
+                                            </div>
+                                          </div>
+                                  </div>
+
+                                  <hr>
+
+                                  <div class="row">
+                                    <div class="col-md-12">
+
+                                      <div class="form-group">
+                                        <label>Remarks</label>
+                                        <textarea class="form-control txtremarks" name="{{form.remarks.name}}" rows="3">{{booking.remarks}}</textarea>
+                                      </div>
+                                    </div>
+
+                                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-info pull-right"><i class="fa fa-save"></i> Save Changes</button>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+      </section>
+      </form>
+    </section>
+    <!-- /.content -->
+{% endblock %}

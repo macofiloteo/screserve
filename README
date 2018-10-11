@@ -1,0 +1,6 @@
+1. git clone this repo
+2. create virtualenv and activate it
+3. pip install -r requirements.txt
+4. sudo apt-get install libmysqlclient-dev
+5. install xampp
+6. configure database configurations at settings

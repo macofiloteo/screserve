@@ -1,0 +1,105 @@
+<!--https://stackoverflow.com/questions/37074966/printing-a-checked-checkbox-tick-box-with-html-and-css -->
+{% load static %}
+<style>
+.checkbox {
+  margin:0;
+  width:20px;
+  height:20px;
+  border: 1px solid #000;
+  display: inline-block;
+}
+
+/* This is what simulates a checkmark icon */
+.checkbox.checked:after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 7px;
+
+  /* "Center" the checkmark */
+  position:relative;
+  top:4px;
+  left:7px;
+
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+</style>
+<!--https://stackoverflow.com/questions/37074966/printing-a-checked-checkbox-tick-box-with-html-and-css -->
+<center><img src="{% static 'screserve/print_header.jpg' %}" style="width:80%;"/></center>
+<h3><center>Sta. Cruz Island Booking Form</center></h3><br>
+<div style="width:100%; float:left;">
+    <div style="width:40%; float:left;">
+        <div style="width:100%;"><label>Date : {{booking.dateofreservation.date}}</label><span style="text-decoration:underline"></span></div>
+        <div style="width:100%;"><label>Time : {{booking.dateofreservation.time}}</label><span style="text-decoration:underline"></span></div>
+    </div>
+
+    <div style="width:15%; float:right;text-align:left;">
+            <div style="width:100%;"><span class="checkbox {% if booking.typeofreservation == 'R' %}checked{%endif%}"></span><label style="vertical-align: top;display:inline-block;">&nbsp;Regular</label></div>
+            <div style="width:100%;"><span class="checkbox {% if booking.typeofreservation == 'E' %}checked{%endif%}"></span><label style="vertical-align: top;display:inline-block;">&nbsp;Excursion</label></span></div>
+    </div>
+</div>
+
+
+<table border="1" style="width:100%;float:left;margin-top:20px;">
+    <tr>
+        <td width="250" style="padding:5px;">Name of Client</td>
+        <td style="padding:5px;">{{booking.client.fname}} {{booking.client.mname}} {{booking.client.lname}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Definite Number of Guests</td>
+        <td style="padding:5px;">{{booking.noofguest}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Actual Date of Visit</td>
+        <td style="padding:5px;">{{booking.dateofactualvisit}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Expected Time of Arrival<br> <small>(Registration Kiosk)</small></td>
+        <td style="padding:5px;">{{booking.timeofarrival}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Preferred Time of Departure<br><small>(Island)</small></td>
+        <td style="padding:5px;">{{booking.timeofdeparture}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Preferred Cottage/s</td>
+        <td style="padding:5px;">#{{booking.cottagenumber}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Contact Number</td>
+        <td style="padding:5px;">{{booking.client.contact}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Attending Officer</td>
+        <td style="padding:5px;">{{booking.officer.fname}} {{booking.officer.mname}} {{booking.officer.lname}}</td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:5px;">Mode of Booking</td>
+        <td style="padding:5px;">
+                <div class="checkbox {% if booking.modeofbooking == 'PV' %}checked{%endif%}"></div>&nbsp;&nbsp;<label style="vertical-align: top;display:inline-block;">Personal Visit</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="checkbox {% if booking.modeofbooking == 'LL' %}checked{%endif%}" ></div>&nbsp;&nbsp;<label style="vertical-align: top;display:inline-block;">Landline</label><br>
+                <div class="checkbox {% if booking.modeofbooking == 'MP' %}checked{%endif%}"></div>&nbsp;&nbsp;<label style="vertical-align: top;display:inline-block;">Mobile Phone</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="checkbox {% if booking.modeofbooking == 'WWW' %}checked{%endif%}"></div>&nbsp;&nbsp;<label style="vertical-align: top;display:inline-block;">Internet</label>
+        </td>
+    </tr>
+    <tr>
+        <td width="250" style="padding:20px;padding-left:5px;"> Remarks</td>
+        <td style="padding:5px;">{{booking.remarks}}</td>
+    </tr>
+</table>
+<br>
+<h5 style=" width:100%;float:left;margin-top:20px;">IMPORTANT:</h5>
+<div style="font-style:italic; font-weight:bolder; width:100%;float:left;">
+        *In cases when guests fail to notify the assigned receptionist, 30 minutes after their appointed time of arrival to the registration counter, and remained non-responsive thereafter, their booking privileges will be rendered void. The same schedule will be made available to the chance passengers of the day.
+        <br><br>
+        *in cases when unexpected weather condition would render the trip unsafe or uncomfortable, all booked trips will be declared CANCELLED. Guests should rebook their schedule, subject to availability of schedules of the given day.
+</div>
+
+<div style="width:100%; float:left;margin-top:50px;background-color:red;">
+    <div style="width:30%; float:left;">
+            <div style="width:100%;border-bottom:solid 1px #000;"></div>
+            <div style="width:100%;text-align:center"><label>Name and Signature of Client</label></div>
+        </div>
+</div>

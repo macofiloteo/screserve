@@ -1,0 +1,117 @@
+{% load has_group %}
+
+<div class="box-body">
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#tab-pending" data-toggle="tab"> Pending Reservation &nbsp;&nbsp;
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right">{{partial_context.pending|length}}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#tab-accepted" data-toggle="tab"> Accepted Reservation &nbsp;&nbsp;
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right">{{partial_context.accepted|length}}</span>
+          </span>
+        </a>
+      </li>
+
+      <li>
+        <a href="#tab-cancelled" data-toggle="tab"> Cancelled &nbsp;&nbsp;
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right">{{partial_context.cancelled|length}}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#tab-declined" data-toggle="tab"> Declined &nbsp;&nbsp;
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right">{{partial_context.declined|length}}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#tab-all_bookings" data-toggle="tab"> All &nbsp;&nbsp;
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right">{{partial_context.all_bookings|length}}</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      {% for status, booking_group in partial_context.items %}
+      <div class="tab-pane {% if status == 'pending'%} active {% endif %}" id="tab-{{status}}">
+        <table   class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Reservation No.</th>
+              <th>Transaction Date</th>
+              <th>Client's Name</th>
+              <th>Contact No.</th>
+              <th>No. of Pax</th>
+              <th>Reserved Date</th>
+              <th>Queue Number</th>
+              <th>Arrival Time</th>
+              <th>Departure Time</th>
+              <th>Status</th>
+              <th style="text-align:center; width: 75px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in booking_group %}
+            <tr class="booking-row" data-pk="{{ booking.pk }}">
+              <td><a href="#" data-toggle="modal" data-target="#mdl-reservation-details">{{booking.pk}}</a></td>
+              <td>{{booking.dateofreservation}}</td>
+              <td>{{booking.client.lname}}, {{booking.client.fname}}</td>
+              <td>{{booking.client.contact}}</td>
+              <td>{{booking.noofguest}}</td>
+              <td>{{booking.dateofactualvisit}}</td>
+              <td>{% if booking.referencenumber %}{{booking.typeofreservation}}-{{booking.turn}}{% endif %}</td>
+              <td>{{booking.timeofarrival}}</td>
+              <td>{{booking.timeofdeparture}}</td>
+              <td>{{booking.get_status_display}}</td>
+              <td style="text-align:center;width: 75px;">
+                {% if status == 'pending'%}   
+                  {% if request.user|has_group:"Administrator" %}
+                    <button type="button" class="btn btn-primary btn-reservation-status" style="width:75px;">
+                      Accept
+                    </button>
+                    <button type="button" class="btn btn-danger btn-reservation-status" style="width:75px;">
+                      Decline
+                    </button>
+                  {% endif %}
+                <a href="{% url 'update_booking' booking.pk %}" class="btn btn-info btn-reservation-update" style="width:75px;">
+                  Update
+                </a>
+                {% endif %}
+                {% if status == 'accepted' %}
+                  {% if request.user|has_group:"Administrator" %}
+                  <a href="{% url 'update_booking' booking.pk %}" class="btn btn-info btn-reservation-update" style="width:75px;">
+                      Update
+                  </a>
+                  <button type="button" class="btn btn-danger btn-reservation-status" style="width:75px;;">
+                      Cancel
+                    </button>
+                  {% endif %}
+                <button type="button" class="btn btn-default btn-print" style="width:75px;">
+                  Print
+              </button>
+                {% endif %}
+
+                
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+

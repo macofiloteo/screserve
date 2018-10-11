@@ -1,0 +1,85 @@
+{% extends "screserve/base.html" %}
+
+{% block title %}Welcome Home!{% endblock %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Home
+        <small>Calendar</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-md-10 col-md-offset-1">
+          <div class="box box-primary">
+            <div class="box-body no-padding">
+              <!-- THE CALENDAR -->
+              <div id="calendar"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+        
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content --> 
+   
+{% endblock %}
+
+
+
+{% block customjs %}
+<script>
+  $(function () {
+    var date = new Date()
+    var d    = date.getDate(),
+        m    = date.getMonth(),
+        y    = date.getFullYear()
+    
+    $('#calendar').fullCalendar({ 
+      editable: false,
+		  url:false,
+      displayEventTime: false,  
+      events    : [
+        {% for event in events %}
+        { 
+          title          : '{{event.sum}}',
+          start          : '{{event.dateofactualvisit|date:'Y-m-d'}}',
+          backgroundColor: '{% if event.sum > maxvisitor.maxnumberofguest %}#f56954{% else %}#00a65a{% endif %}', //red
+          borderColor    : '{% if event.sum > maxvisitor.maxnumberofguest %}#f56954{% else %}#00a65a{% endif %}' //red
+        },
+        {% endfor %}
+        ],
+        eventClick: function(calEvent, jsEvent, view) { 
+          var startDate=calEvent.start;
+          var newFormatStartDate=$.datepicker.formatDate('yy-mm-dd', new Date(startDate));
+
+          $.ajax({
+            url: "{% url 'print_accepted_reservation' %}",
+            type: 'GET',
+            data: {
+              'reserveddate': newFormatStartDate,
+            },
+            success: function (data) {
+              $("#print_data").html(data);
+              window.print(); // change window to winPrint
+            },
+          });
+        }
+    });
+  })
+</script>
+{% endblock %}

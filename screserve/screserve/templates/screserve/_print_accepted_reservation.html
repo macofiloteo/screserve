@@ -1,0 +1,26 @@
+{% load static %}
+
+Reserved Date: <label>{{ context.reserveddate }}</label>
+
+<table border="1" style="width:100%;float:left;margin-top:20px;">
+    <thead>
+        <tr>
+            <td style="padding:5px;font-weight: bold">FULLNAME</td>
+            <td>NO. OF GUEST</td>
+            <td>Queue Number</td>
+            <td>ATTENDING OFFICER</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in context.bookings %}
+        <tr>
+            <td  style="padding:5px;">{{booking.client.fname}} {{booking.client.mname}} {{booking.client.lname}}</td>
+            <td>{{booking.noofguest}}</td>
+            <td>
+                {{booking.typeofreservation}}-{{booking.turn}}
+            </td>
+            <td>{{booking.officer.fname}} {{booking.officer.mname}} {{booking.officer.lname}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

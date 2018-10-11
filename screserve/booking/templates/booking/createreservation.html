@@ -1,0 +1,181 @@
+{% extends "screserve/base.html" %}
+
+{% block title %}Welcome Home!{% endblock %}
+
+
+{% block content %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Reservation
+        <small>Create Reservation</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="?"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Client</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+     <form class="frm-reserve-add" method="POST" action="{% url 'create_booking' %}" enctype="multipart/form-data">
+       {% csrf_token %}
+      <section class="content">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box no-border">
+                  <div class="box-header bg-blue">
+                    <h3 class="box-title">Customer Details</h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label>Select Customer</label>
+                        <select id="select-profile" class="form-control select2" style="width: 100%;" name="client">
+                          {% for profile in profiles %}
+                          <option data-url="{% url 'get_profile_info_json' pk=profile.pk %}" value={{profile.pk}}>#{{profile.pk}} {{profile.lname}}, {{profile.fname}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                      Birthdate : <label id="mjs-birthday">March 4, 1994</label></br>
+                      Sex : <label id="mjs-sex">Female</label><br>
+                      Address : <label id="mjs-address">Zone 1, Divisoria</label><br>
+                      Contact No. : <label id="mjs-contact">Zone 1, Divisoria</label>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+              <div class="box no-border">
+                <div class="box-header bg-blue">
+                  <h3 class="box-title">Reservation Details </h3>
+                  <span class="pull-right">Date of Transaction: &nbsp; April 4, 2018 8:00 AM</span>
+                </div>
+                <div class="box-body">
+
+                                  <div class="row">
+                                          <div class="col-md-8">
+                                            <div class="form-group">
+                                              <label>Mode</label> <span style="color:red;">{{form.modeofbooking.errors.as_text}}</span>
+                                              <br>
+                                              <span>
+                                                <input type="radio" name="modeofbooking" class="" value="PV">
+                                                 Personal Visit
+                                              </span> &nbsp;  &nbsp;  &nbsp;
+                                              <span>
+                                                <input type="radio" name="modeofbooking" class="" value="LL">
+                                                 Landline
+                                              </span> &nbsp;  &nbsp;  &nbsp;
+                                               <span>
+                                                <input type="radio" name="modeofbooking" class="" value="MP">
+                                                 Mobile Phone
+                                              </span>
+                                               <span> &nbsp;  &nbsp;  &nbsp;
+                                                <input type="radio" name="modeofbooking" class="" value="WWW">
+                                                Internet
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <br>
+                                          <div class="col-md-6">
+                                            <div class="form-group">
+                                              <label>Select Attending Officer</label>
+                                                <select class="form-control select2" style="width: 100%;" name="officer">
+                                                  {% for officer in officers %}
+                                                  <option value={{officer.pk}}>{{officer.lname}}, {{officer.fname}}</option>
+                                                  {% endfor %}
+                                                </select>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <div class="form-group">
+                                              <label>Cottage</label> <span style="color:red;">{{form.cottagenumber.errors.as_text}}</span>
+                                                <input type="number" class="form-control txtcottage" name="cottagenumber" value="{{form.cottagenumber.value}}" required>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <div class="form-group">
+                                              <label>Number of Guest</label> <span style="color:red;">{{form.noofguest.errors.as_text}}</span>
+                                                <input type="number" class="form-control txtnoofguest" name="noofguest" value="{{form.noofguest.value}}" required>
+                                            </div>
+                                          </div>
+
+                                          <div class="clearfix"></div>
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Actual Date of Visit</label> <span style="color:red;">{{form.dateofactualvisit.errors.as_text}}</span>
+                                              <input type="date" class="form-control txtdateactual" name="dateofactualvisit" value="{{form.dateofactualvisit.value}}" required>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Expected Time of Arrival</label> <span style="color:red;">{{form.timeofarrival.errors.as_text}}</span>
+                                              <input type="time" class="form-control txtexpectedtime" name="timeofarrival" value="{{form.timeofarrival.value}}" required>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label>Preferred Time of Departure</label> <span style="color:red;">{{form.timeofdeparture.errors.as_text}}</span>
+                                              <input type="time" class="form-control txtprefferedtime" name="timeofdeparture" value="{{form.timeofdeparture.value}}" required>
+                                            </div>
+                                          </div>
+                                  </div>
+
+                                  <hr>
+
+                                  <div class="row">
+                                    <div class="col-md-12">
+
+                                      <div class="form-group">
+                                        <label>Remarks</label>
+                                        <textarea class="form-control txtremarks" name="remarks" rows="3">{{form.remarks.value}}</textarea>
+                                      </div>
+                                    </div>
+
+                                  </div>
+
+
+
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+      </section>
+      </form>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block customjs %}
+  <script>
+  $("#select-profile").on("change", function (e) {
+    var obj = $(this).select2("data");
+    var sex;
+    $.ajax({
+      url: obj[0].element.attributes['data-url'].value,
+      type: 'get',
+      dataType: 'json',
+      success: function (data) {
+        $("#mjs-birthday").text(data.json_data["birthday"]);
+
+        if(data.json_data["sex"] == "M"){
+          sex = "Male"
+        }
+        else {
+          sex = "Female"
+        }
+        $("#mjs-sex").text(sex);
+        $("#mjs-address").text(data.json_data["address"]);
+        $("#mjs-contact").text(data.json_data["contact"]);
+      }
+    });
+  });
+  </script>
+{% endblock %}
